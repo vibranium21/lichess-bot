@@ -8,7 +8,9 @@ from __future__ import annotations
 import chess
 from chess.engine import PlayResult
 import random
+import math
 from engine_wrapper import MinimalEngine
+from movegeneration import Minimax_Get_Move
 from typing import Any
 
 
@@ -46,3 +48,10 @@ class FirstMove(ExampleEngine):
         moves = list(board.legal_moves)
         moves.sort(key=str)
         return PlayResult(moves[0], None)
+
+
+class Engine(ExampleEngine):
+    def search(self, board: chess.Board, *args: Any) -> PlayResult:
+        player_color = board.turn
+        best_move, _ = Minimax_Get_Move(board, 4, player_color, -20000, math.inf)
+        return PlayResult(best_move, None)
