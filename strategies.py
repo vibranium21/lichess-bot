@@ -26,6 +26,15 @@ class RandomMove(ExampleEngine):
     def search(self, board: chess.Board, *args: Any) -> PlayResult:
         """Choose a random move."""
         return PlayResult(random.choice(list(board.legal_moves)), None)
+    
+    
+   class Engine(ExampleEngine):
+    def search(self, board: chess.Board, *args: Any) -> PlayResult:
+        player_color = board.turn
+        best_move, _ = Minimax_Get_Move(board, 4, player_color, math.inf, -math.inf)
+        return PlayResult(best_move, None)
+
+    
 
 
 class Alphabetical(ExampleEngine):
