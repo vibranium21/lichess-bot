@@ -46,3 +46,10 @@ class FirstMove(ExampleEngine):
         moves = list(board.legal_moves)
         moves.sort(key=str)
         return PlayResult(moves[0], None)
+    
+class Engine(ExampleEngine):
+    def search(self, board: chess.Board, *args: Any) -> PlayResult:
+        player_color = board.turn
+        best_move, _ = Minimax_Get_Move(board, 4, player_color, math.inf, -math.inf)
+        return PlayResult(best_move, None)
+
