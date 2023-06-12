@@ -2,6 +2,7 @@ import chess
 import math
 
 
+bishopPair = 70
 piece_values = {
     chess.PAWN: 100,
     chess.ROOK: 500,
@@ -82,6 +83,38 @@ kingEvalWhite = [
 kingEvalBlack = list(reversed(kingEvalWhite))
 
 
+chess.WHITE: chess.Color= True
+chess.BLACK: chess.Color= False
+def WhiteBishopPair(position):
+    white_bishops = 0
+
+    for square in chess.SQUARES:
+        piece = position.piece_at(square)
+
+        if piece is not None and piece.piece_type == chess.BISHOP and piece.color == chess.WHITE:
+            white_bishops += 1
+
+    return white_bishops >= 2
+
+
+        
+def BlackBishopPair(position):
+    black_bishops = 0
+
+    for square in chess.SQUARES:
+        piece = position.piece_at(square)
+
+        if piece is not None and piece.piece_type == chess.BISHOP and piece.color == chess.BLACK:
+            black_bishops += 1
+
+    return black_bishops >= 2
+
+
+
+
+            
+
+
 
 
 def evaluate_piece(piece: chess.Piece, square: chess.Square):
@@ -104,6 +137,12 @@ def evaluate_piece(piece: chess.Piece, square: chess.Square):
 
 def evaluate(position):
     eval = 0
+    BlackBishopsPair = BlackBishopPair(position)
+    WhiteBishopsPair = WhiteBishopPair(position)
+    if BlackBishopsPair == True:
+        eval -= bishopPair
+    elif WhiteBishopsPair == True:
+        eval += bishopPair
     for square in chess.SQUARES:
         piece = position.piece_at(square)
         if not piece:
@@ -154,12 +193,21 @@ def Minimax_Get_Move(position, depth, player_color, alpha, beta):
         _, evaluation = Minimax_Get_Move(position, depth - 1, player_color, -beta, -alpha)
         evaluation = -evaluation
         position.pop()
+        if player_color == chess.WHITE:
+            if evaluation > alpha:
+                alpha = evaluation
+                best_move = move
 
-        if evaluation > alpha:
-            alpha = evaluation
-            best_move = move
+            if alpha >= beta:
+                break
+        if player_color == chess.BLACK:
+            if evaluation < alpha:
+                alpha = evaluation
+                best_move = move
 
-        if alpha >= beta:
-            break
+            if alpha <= beta:
+                break
+
+    return best_move, alpha
 
     return best_move, alpha
